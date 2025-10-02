@@ -1,57 +1,95 @@
-import React from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable } from 'react-native';
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { Tabs } from "expo-router";
+import React from "react";
+import { View } from "react-native";
 
-import Colors from '@/constants/Colors';
-import { useColorScheme } from '@/components/useColorScheme';
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
-
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
+const TabBarIcon = ({ name, focused }: { name: string, focused: boolean }) => {
+  return (
+    <View
+      className={`w-full h-full rounded-full items-center justify-center ${
+        focused ? "bg-white" : "bg-transparent"
+      }`}
+      style={{
+        backgroundColor: focused ? "#fff" : "transparent",
+      }}
+    >
+      <FontAwesome
+        name={name as any}
+        color={focused ? "#000" : "#fff"}
+        size={24}
+      />
+    </View>
+  );
+};
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
-      }}>
+        tabBarShowLabel: false,
+        headerShown: false,
+        tabBarStyle: {
+          backgroundColor: "#11131F",
+          borderTopWidth: 0,
+          elevation: 0,
+          height: 80,
+          paddingHorizontal: 15,
+          paddingVertical: 10,
+          marginHorizontal: 20,
+          marginBottom: 20,
+          borderRadius: 40,
+          position: "absolute",
+        },
+        // Style pour chaque item de la tabbar
+        tabBarItemStyle: {
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          paddingHorizontal: 5,
+        },
+        // Style pour le conteneur des icônes
+        tabBarIconStyle: {
+          width: 60,
+          height: 60,
+          justifyContent: "center",
+          alignItems: "center",
+        },
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
+          title: "Home",
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon name="home" focused={focused} />
           ),
         }}
       />
       <Tabs.Screen
         name="two"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: "Grid",
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon name="th-large" focused={focused} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="three"
+        options={{
+          title: "Stats",
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon name="bar-chart" focused={focused} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="four"
+        options={{
+          title: "Profile",
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon name="user-o" focused={focused} />
+          ),
         }}
       />
     </Tabs>
